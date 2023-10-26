@@ -1,0 +1,34 @@
+#ifndef _BigInteger_h
+#define _BigInteger_h
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define max 1001
+
+struct node {
+    int data;
+    struct node* next;
+};
+
+struct BigInteger {
+    struct node* l;
+    int length;
+    int sign;
+    int head,tail; // 1 for positive, -1 for negative
+};
+
+void addatfront(struct node** n1, int data);
+struct BigInteger initialize(char* s);
+void display(struct BigInteger n1);
+struct BigInteger add(struct BigInteger n1, struct BigInteger n2);
+struct BigInteger sub(struct BigInteger n1, struct BigInteger n2);
+struct BigInteger mul(struct BigInteger num1, struct BigInteger num2);
+struct BigInteger div1(struct BigInteger dividend, struct BigInteger divisor);
+// struct BigInteger divideBy2(struct BigInteger num);
+// struct BigInteger createBigInteger(int length, int* digits);
+struct BigInteger rev(struct BigInteger A);
+struct BigInteger length(struct BigInteger A);
+struct node* insert(int n);
+struct BigInteger mod(struct BigInteger dividend, struct BigInteger divisor);
+#endif
