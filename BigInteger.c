@@ -134,31 +134,35 @@ struct BigInteger add(struct BigInteger n1, struct BigInteger n2) {
     else if (n1.sign == -1 && n2.sign == 1) {
         if(compare(n1,n2)==1)
         {
-            result.sign=-1;
+            
             n1.sign=1;
             result=sub(n1,n2);
+            result.sign=-1;
             return result;
         }
         else{
-            result.sign=1;
+            
             n1.sign=1;
             result=sub(n2,n1);
+            result.sign=1;
             return result;
         }
     }
     else {
         if(compare(n1,n2)==1)
         {
-            result.sign=1;
+            
             n2.sign=1;
             result=sub(n1,n2);
+            result.sign=1;
             return result;
         }
         else
         {
-            result.sign=-1;
+            
             n2.sign=1;
             result=sub(n2,n1);
+            result.sign=-1;
             return result;
         }
     }
@@ -684,7 +688,7 @@ struct BigInteger mod(struct BigInteger n1,struct BigInteger n2)
     unsigned int count=0;
     if(compare(n1,n2)==-1)
     {
-        return n1;
+        return rev(n1);
     }
     if(n1.sign==n2.sign)
     {
