@@ -1,47 +1,47 @@
 #include "BigInteger.h"
 
-void addatfront(struct node** n1, int data) {
+void addatfront(struct node** A, int data) {
     struct node* temp = (struct node*)malloc(sizeof(struct node));
     if (!temp) {
         printf("Memory allocation failed\n");
         return;
     }
     temp->data = data;
-    temp->next = *n1;
-    *n1 = temp;
+    temp->next = *A;
+    *A = temp;
 }
 struct BigInteger initialize(char* s) {
-    struct BigInteger n1;
-    n1.l = NULL;
-    n1.length = 0;
-    n1.sign = 1;
+    struct BigInteger A;
+    A.l = NULL;
+    A.length = 0;
+    A.sign = 1;
 
     if (s[0] == '-') {
-        n1.sign = -1;
+        A.sign = -1;
         s++; // Move past the negative sign
     }
     int l=strlen(s);
     for (int i = (s[0] == '-' ? 1 : 0); i < l; i++) {
         if (s[i] >= '0' && s[i] <= '9') {
-            addatfront(&(n1.l), (s[i] - '0'));
-            n1.length++;
+            addatfront(&(A.l), (s[i] - '0'));
+            A.length++;
         }
     }
 
-    return n1;
+    return A;
 }
-void display(struct BigInteger n1) {
-    if (n1.sign == -1) {
+void display(struct BigInteger A) {
+    if (A.sign == -1) {
         printf("-");
     }
 
-    if (!n1.l) {
+    if (!A.l) {
         printf("0\n");
         return;
     }
 
     // Count the number of digits to determine the required buffer size
-    int numDigits = n1.length;
+    int numDigits = A.length;
     int buffer_size = numDigits + 1;  // +1 for the null terminator
     char* displayStr = (char*)malloc(buffer_size);
     if (!displayStr) {
@@ -49,7 +49,7 @@ void display(struct BigInteger n1) {
         return;
     }
 
-    struct node* current = n1.l;
+    struct node* current = A.l;
     int i = 0;
     while (current) {
         displayStr[i] = current->data + '0';
@@ -73,18 +73,18 @@ struct node* reverse(struct node* head) {
     head = temp1;
     return temp1;
 }
-int compare(struct BigInteger n1, struct BigInteger n2) {
+int compare(struct BigInteger A, struct BigInteger B) {
    
 
     
-    if (n1.length > n2.length) {
+    if (A.length > B.length) {
         return 1;
-    } else if (n1.length < n2.length) {
+    } else if (A.length < B.length) {
         return -1;
     } else {
         int res=0;
-        struct node* itr1=n1.l;
-        struct node* itr2= n2.l;
+        struct node* itr1=A.l;
+        struct node* itr2= B.l;
         while(itr1!=NULL)
         {
             if(itr1->data > itr2->data)
@@ -114,62 +114,62 @@ int compare(struct BigInteger n1, struct BigInteger n2) {
 //     A.length=l;
 //     return A;
 // }
-struct BigInteger add(struct BigInteger n1, struct BigInteger n2) {
+struct BigInteger add(struct BigInteger A, struct BigInteger B) {
     struct BigInteger result;
     result.l = NULL;
     result.length = 0;
-     if(n2.length>n1.length)
+     if(B.length>A.length)
     {
-        struct BigInteger temp = n1;
-        n1=n2;
-        n2=temp;
+        struct BigInteger temp = A;
+        A=B;
+        B=temp;
     }
 
     // Determine the sign based on the conditions
-    if (n1.sign == -1 && n2.sign == -1) {
+    if (A.sign == -1 && B.sign == -1) {
         result.sign = -1; // Both inputs are negative
-    } else if (n1.sign == 1 && n2.sign == 1) {
+    } else if (A.sign == 1 && B.sign == 1) {
         result.sign = 1; // Both inputs are positive
     }
-    else if (n1.sign == -1 && n2.sign == 1) {
-        if(compare(n1,n2)==1)
+    else if (A.sign == -1 && B.sign == 1) {
+        if(compare(A,B)==1)
         {
             
-            n1.sign=1;
-            result=sub(n1,n2);
+            A.sign=1;
+            result=sub(A,B);
             result.sign=-1;
             return result;
         }
         else{
             
-            n1.sign=1;
-            result=sub(n2,n1);
+            A.sign=1;
+            result=sub(B,A);
             result.sign=1;
             return result;
         }
     }
     else {
-        if(compare(n1,n2)==1)
+        if(compare(A,B)==1)
         {
             
-            n2.sign=1;
-            result=sub(n1,n2);
+            B.sign=1;
+            result=sub(A,B);
             result.sign=1;
             return result;
         }
         else
         {
             
-            n2.sign=1;
-            result=sub(n2,n1);
+            B.sign=1;
+            result=sub(B,A);
             result.sign=-1;
             return result;
         }
     }
 
     int carry = 0;
-    struct node* p1 = n1.l;
-    struct node* p2 = n2.l;
+    struct node* p1 = A.l;
+    struct node* p2 = B.l;
 
     while (p1 || p2) {
         int val1 = (p1) ? p1->data : 0;
@@ -197,66 +197,66 @@ struct BigInteger add(struct BigInteger n1, struct BigInteger n2) {
     }
     return result;
 }
-struct BigInteger sub(struct BigInteger n1, struct BigInteger n2) {
+struct BigInteger sub(struct BigInteger A, struct BigInteger B) {
     struct BigInteger result;
     result.l = NULL;
     result.length = 0;
 
-    if (n2.length > n1.length) {
+    if (B.length > A.length) {
         // Swap n1 and n2, so n1 always represents the larger absolute value
-        struct BigInteger temp = n1;
-        n1 = n2;
-        n2 = temp;
+        struct BigInteger temp = A;
+        A = B;
+        B = temp;
     }
 
     // Determine the sign based on the conditions
-    if (n1.sign == -1 && n2.sign == -1) 
+    if (A.sign == -1 && B.sign == -1) 
     {
         
-         if(compare(n1,n2)==1)
+         if(compare(A,B)==1)
         {
             result.sign=-1;
             
         }
         else{
             result.sign=1;
-            struct BigInteger temp = n1;
-            n1 = n2;
-            n2 = temp;
+            struct BigInteger temp = A;
+            A = B;
+            B = temp;
         }
     } 
-    else if (n1.sign == 1 && n2.sign == 1)
+    else if (A.sign == 1 && B.sign == 1)
     {
-         if(compare(n1,n2)==1)
+         if(compare(A,B)==1)
         {
             result.sign=1;
         }
         else{
             result.sign=-1;
-            struct BigInteger temp = n1;
-            n1 = n2;
-            n2 = temp;
+            struct BigInteger temp = A;
+            A = B;
+            B = temp;
         }
     }
-    else if(n1.sign==1 && n2.sign==-1)
+    else if(A.sign==1 && B.sign==-1)
     {
-        n2.sign=1;
+        B.sign=1;
         result.sign=1;
-        result=add(n1,n2);
+        result=add(A,B);
         return result;
 
     }
     else
     {
-        n2.sign=-1;
+        B.sign=-1;
         result.sign=-1;
-        result=add(n1,n2);
+        result=add(A,B);
         return result;
     }
     
     int borrow = 0;
-    struct node* p1 = n1.l;
-    struct node* p2 = n2.l;
+    struct node* p1 = A.l;
+    struct node* p2 = B.l;
 
     while (p1 || p2) {
         int val1 = (p1) ? p1->data : 0;
@@ -531,13 +531,13 @@ struct BigInteger mul(struct BigInteger num1, struct BigInteger num2) {
 //     return result;
 // }
 
-struct BigInteger div1( struct BigInteger n1,struct BigInteger n2)
+struct BigInteger div1( struct BigInteger A,struct BigInteger B)
 {
     struct BigInteger result;
     result.l=NULL;
     result.length=0;
     unsigned int count=0;
-    if(n1.sign==n2.sign)
+    if(A.sign==B.sign)
     {
         result.sign=1;
     }
@@ -545,13 +545,13 @@ struct BigInteger div1( struct BigInteger n1,struct BigInteger n2)
     {
         result.sign=-1;
     }
-    n1.sign=1;
-    n2.sign=1;
-    struct BigInteger temp=n2;
-    while(compare(n1,temp)>=0)
+    A.sign=1;
+    B.sign=1;
+    struct BigInteger temp=B;
+    while(compare(A,temp)>=0)
     {
         count++;
-        temp= add(temp,n2);
+        temp= add(temp,B);
         
         temp.l=reverse(temp.l);
        
@@ -680,17 +680,17 @@ struct BigInteger createBigInteger(int length, int* digits) {
 
     return bigInt;
 }
-struct BigInteger mod(struct BigInteger n1,struct BigInteger n2)
+struct BigInteger mod(struct BigInteger A,struct BigInteger B)
 {
     struct BigInteger result;
     result.l=NULL;
     result.length=0;
     unsigned int count=0;
-    if(compare(n1,n2)==-1)
+    if(compare(A,B)==-1)
     {
-        return rev(n1);
+        return rev(A);
     }
-    if(n1.sign==n2.sign)
+    if(A.sign==B.sign)
     {
         result.sign=1;
     }
@@ -699,18 +699,18 @@ struct BigInteger mod(struct BigInteger n1,struct BigInteger n2)
         result.sign=-1;
     }
     
-    n1.sign=1;
-    n2.sign=1;
-    struct BigInteger temp=n2;
+    A.sign=1;
+    B.sign=1;
+    struct BigInteger temp=B;
     struct BigInteger prev;
-    while(compare(n1,temp)>=0)
+    while(compare(A,temp)>=0)
     {
         count++;
         prev=temp;
-        temp= add(temp,n2);
+        temp= add(temp,B);
         temp.l=reverse(temp.l);
     }
 
-    result=sub(n1,prev);
+    result=sub(A,prev);
     return result;
 }
